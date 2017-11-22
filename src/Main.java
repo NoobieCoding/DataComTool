@@ -6,6 +6,6 @@ import java.util.Vector;
 public class Main {
     public static void main(String[] args) {
         NetworkInfo nw = new NetworkInfo();
-        System.out.println("My ip:" + nw.getMynetworkips());
+        System.out.println("My IP Address:" + nw.getMyNetworkIPs());
     }
 }
