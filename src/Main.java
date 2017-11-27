@@ -5,8 +5,12 @@ import java.util.Vector;
  */
 public class Main {
     public static void main(String[] args) {
-        NetworkInfo nw = new NetworkInfo();
-        System.out.println("My IP Address:" + nw.getMyNetworkIPs());
-        System.out.println("My MAC Address:" + nw.getMacAddress());
+        NetworkInfo ni = new NetworkInfo();
+        UI ui = new UI(ni);
+        ni.addObserver(ui);
+        ui.run();
+//        System.out.println(ni.getMyIPAddress());
+//        System.out.println("My IP Address:" + ni.getMyNetworkIPs());
+//        System.out.println("My MAC Address:" + ni.getMacAddress());
     }
 }
