@@ -9,8 +9,5 @@ public class Main {
         UI ui = new UI(ni);
         ni.addObserver(ui);
         ui.run();
-//        System.out.println(ni.getMyIPAddress());
-//        System.out.println("My IP Address:" + ni.getMyNetworkIPs());
-//        System.out.println("My MAC Address:" + ni.getMacAddress());
     }
 }

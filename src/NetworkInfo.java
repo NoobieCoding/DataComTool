@@ -15,7 +15,6 @@ public class NetworkInfo extends Observable {
 
 	public NetworkInfo() {
 		findMacAddress();
-		// getData();
 	}
 
 	public Vector<String> getAvailableDevices() {
@@ -41,7 +40,6 @@ public class NetworkInfo extends Observable {
 			mac_address = macAddressBuilder.toString();
 
 		} catch (Exception e) {
-
 		}
 	}
 
@@ -91,21 +89,17 @@ public class NetworkInfo extends Observable {
 							break;
 						}
 					}
-
-					System.out.println("Search log:");
+					int countChecking = 0;
 					for (int i = 1; i <= 254; ++i) {
 						try {
 							InetAddress addr = InetAddress.getByName(mynetworkips + new Integer(i).toString());
 							String newAddr = addr.getHostAddress();
-							if (addr.isReachable(300)) {
+							countChecking++;
+							if (addr.isReachable(100)) {
 								availableDevices.add(newAddr);
-								setChanged();
-								notifyObservers(availableDevices);
-								System.out.println("Find " + newAddr);
-							} else {
-								System.out.println("Not find " + newAddr);
 							}
-
+							setChanged();
+							notifyObservers(countChecking);
 						} catch (Exception e) {
 						}
 					}
@@ -113,6 +107,8 @@ public class NetworkInfo extends Observable {
 					System.out.println("\nAll Connected devices(" + availableDevices.size() + "):");
 					for (int i = 0; i < availableDevices.size(); ++i)
 						System.out.println(availableDevices.get(i));
+					setChanged();
+					notifyObservers("Finish");
 				} catch (Exception e) {
 				}
 			}
