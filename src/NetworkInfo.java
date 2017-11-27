@@ -2,8 +2,6 @@
 /**
  * Created by tuterdust on 21/11/2560.
  */
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -13,8 +11,10 @@ public class NetworkInfo {
 	private String myNetworkIPs = "";
 	private Vector<String> Available_Devices = new Vector<>();
 	private Vector<String> Unavailable_Devices = new Vector<>();
+	private String mac_address = "";
 
 	public NetworkInfo() {
+        findMacAddress();
 		getData();
 	}
 
@@ -24,6 +24,33 @@ public class NetworkInfo {
 
 	public Vector<String> getUnavailable_Devices() {
 		return Unavailable_Devices;
+	}
+
+	public void findMacAddress() {
+		try {
+			InetAddress ipAddress = InetAddress.getLocalHost();
+			NetworkInterface networkInterface = NetworkInterface
+					.getByInetAddress(ipAddress);
+			byte[] macAddressBytes = networkInterface.getHardwareAddress();
+			StringBuilder macAddressBuilder = new StringBuilder();
+
+			for (int macAddressByteIndex = 0; macAddressByteIndex < macAddressBytes.length; macAddressByteIndex++)
+			{
+				String macAddressHexByte = String.format("%02X",
+						macAddressBytes[macAddressByteIndex]);
+				macAddressBuilder.append(macAddressHexByte);
+
+				if (macAddressByteIndex != macAddressBytes.length - 1)
+				{
+					macAddressBuilder.append(":");
+				}
+			}
+
+			mac_address =  macAddressBuilder.toString();
+
+		}catch (Exception e) {
+
+		}
 	}
 
 	public void getData() {
@@ -62,19 +89,17 @@ public class NetworkInfo {
 				}
 			}
 
-			System.out.println("My Device IP: " + myip + "\n");
 
 			System.out.println("Search log:");
 			for (int i = 1; i <= 254; ++i) {
 				try {
 					InetAddress addr = InetAddress.getByName(mynetworkips + new Integer(i).toString());
-					if (addr.isReachable(1000)) {
-						System.out.println("Available: " + addr.getHostAddress());
+					if (addr.isReachable(200)) {
 						Available_Devices.add(addr.getHostAddress());
 					} else
 						System.out.println("Not available: " + addr.getHostAddress());
 
-				} catch (Exception ioex) {
+				} catch (Exception e) {
 				}
 			}
 
@@ -88,5 +113,9 @@ public class NetworkInfo {
 
 	public String getMyNetworkIPs() {
 		return myNetworkIPs;
+	}
+
+	public String getMacAddress() {
+		return mac_address;
 	}
 }
