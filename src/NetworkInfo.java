@@ -2,6 +2,7 @@
 /**
  * Created by tuterdust on 21/11/2560.
  */
+
 import java.net.*;
 import java.util.Enumeration;
 import java.util.Observable;
@@ -11,36 +12,11 @@ public class NetworkInfo extends Observable {
 
 	private String myNetworkIPs = "";
 	private Vector<String> availableDevices = new Vector<>();
-	private String mac_address = "";
 
-	public NetworkInfo() {
-		findMacAddress();
-	}
+	public NetworkInfo() {}
 
 	public Vector<String> getAvailableDevices() {
 		return availableDevices;
-	}
-
-	public void findMacAddress() {
-		try {
-			InetAddress ipAddress = InetAddress.getLocalHost();
-			NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ipAddress);
-			byte[] macAddressBytes = networkInterface.getHardwareAddress();
-			StringBuilder macAddressBuilder = new StringBuilder();
-
-			for (int macAddressByteIndex = 0; macAddressByteIndex < macAddressBytes.length; macAddressByteIndex++) {
-				String macAddressHexByte = String.format("%02X", macAddressBytes[macAddressByteIndex]);
-				macAddressBuilder.append(macAddressHexByte);
-
-				if (macAddressByteIndex != macAddressBytes.length - 1) {
-					macAddressBuilder.append(":");
-				}
-			}
-
-			mac_address = macAddressBuilder.toString();
-
-		} catch (Exception e) {
-		}
 	}
 
 	public void getData() {
@@ -60,9 +36,7 @@ public class NetworkInfo extends Observable {
 						myNetworkIPs = ip;
 				}
 			}
-		} catch (SocketException e) {
-			throw new RuntimeException(e);
-		}
+		} catch (SocketException e) { throw new RuntimeException(e); }
 		getNetworkData();
 	}
 
@@ -70,9 +44,7 @@ public class NetworkInfo extends Observable {
 		try {
 			String myIP = InetAddress.getLocalHost().getHostAddress();
 			return myIP;
-		} catch (Exception e) {
-			return "";
-		}
+		} catch (Exception e) { return "";	}
 	}
 
 	public void getNetworkData() {
@@ -109,8 +81,7 @@ public class NetworkInfo extends Observable {
 						System.out.println(availableDevices.get(i));
 					setChanged();
 					notifyObservers("Finish");
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 			}
 		};
 		t.start();
@@ -120,7 +91,4 @@ public class NetworkInfo extends Observable {
 		return myNetworkIPs;
 	}
 
-	public String getMacAddress() {
-		return mac_address;
-	}
 }
